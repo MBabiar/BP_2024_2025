@@ -6,6 +6,9 @@
 data/
 output/
 
+# Python
+__pycache__/
+
 # Dashboard app
 dashboard_app/src/assets/family_tree
 dashboard_app/src/cache
