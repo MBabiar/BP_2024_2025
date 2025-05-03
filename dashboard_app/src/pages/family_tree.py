@@ -43,13 +43,13 @@ def layout() -> list:
                                     title="Family Tree Settings",
                                     children=[
                                         html.P("Depth of tree:"),
-                                        dcc.Slider(
-                                            id="tree-depth-slider",
+                                        dbc.Input(
+                                            id="tree-depth-input",
+                                            type="number",
                                             min=1,
-                                            max=10,
+                                            max=1000,
                                             step=1,
                                             value=3,
-                                            marks={i: str(i) for i in range(1, 11)},
                                         ),
                                     ],
                                     min_height="100px",

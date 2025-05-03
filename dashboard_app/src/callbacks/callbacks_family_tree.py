@@ -242,7 +242,7 @@ def register_callbacks(app) -> None:
         Input("generate-tree-button", "n_clicks"),
         [
             State("selected-cat-store", "data"),
-            State("tree-depth-slider", "value"),
+            State("tree-depth-input", "value"),
             State("db-connection-state", "data"),
         ],
     )

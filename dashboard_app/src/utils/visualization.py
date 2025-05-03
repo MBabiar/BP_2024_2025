@@ -263,11 +263,14 @@ def create_family_tree_network(
         height="100%", width="100%", directed=True, notebook=False, select_menu=True, cdn_resources="remote"
     )
 
-    node_label_size = 14 + 2 * depth
-    edge_selection_width = 0.5 + depth * 0.5
-    edge_hover_width = 0.5 + depth * 0.5
-    gravitational_constant = -30 - 5 * depth
-    central_gravity = 0.01 - 0.001 * depth
+    depth_scale_multiplier = min(depth, 20)
+
+    root_node_size = 30 + 2 * depth_scale_multiplier
+    node_label_size = 14 + 2 * depth_scale_multiplier
+    edge_selection_width = 0.5 + depth_scale_multiplier * 0.5
+    edge_hover_width = 0.5 + depth_scale_multiplier * 0.5
+    gravitational_constant = -30 - 5 * depth_scale_multiplier
+    central_gravity = max(0.01 - 0.001 * depth_scale_multiplier, 0.001)
 
     net.options = {
         "nodes": {
@@ -299,7 +302,7 @@ def create_family_tree_network(
 
     for node_id, node_data in G.nodes(data=True):
         is_root_cat = str(node_id) == str(root_cat_id)
-        node_size = 30 if is_root_cat else 20
+        node_size = root_node_size if is_root_cat else 20
         border_width = 4 if is_root_cat else 2
         shape = "star" if is_root_cat else "dot"
 
@@ -324,16 +327,20 @@ def create_family_tree_network(
         )
 
     html_content = net.generate_html()
-    html_content = add_reset_selection_fix(html_content)
+    html_content = add_custom_js(html_content)
     html_content = add_custom_legend(html_content, root_cat_id, inbreeding_coefficient, root_cat_legend_data)
     html_content = add_custom_css(html_content)
 
     return html_content
 
 
-def add_reset_selection_fix(html_content: str) -> str:
+def add_custom_js(html_content: str) -> str:
     """
-    Add custom JavaScript to fix the selection reset issue in the network visualization.
+    Add custom JavaScript.
+
+    Fixes the issue where clicking on an empty space in the network resets the selection.
+
+    Adds a button to toggle the physics simulation on and off.
 
     Args:
         html_content (str): HTML content for the network visualization
@@ -351,9 +358,32 @@ def add_reset_selection_fix(html_content: str) -> str:
                         neighbourhoodHighlight({nodes: []});
                     }
                 });
+                
+                var physicsButton = document.createElement('button');
+                physicsButton.id = 'physics-toggle-btn';
+                physicsButton.innerHTML = '⏸️ Freeze Layout';
+                physicsButton.title = 'Toggle physics simulation on/off';
+                
+                var physicsEnabled = true;
+                
+                physicsButton.addEventListener('click', function() {
+                    physicsEnabled = !physicsEnabled;
+                    
+                    if (physicsEnabled) {
+                        network.setOptions({ physics: { enabled: true } });
+                        physicsButton.innerHTML = '⏸️ Freeze Layout';
+                        physicsButton.classList.remove('active');
+                    } else {
+                        network.setOptions({ physics: { enabled: false } });
+                        physicsButton.innerHTML = '▶️ Resume Layout';
+                        physicsButton.classList.add('active');
+                    }
+                });
+                
+                document.body.appendChild(physicsButton);
             }
         } catch (e) {
-            console.error("Error in network click handler:", e);
+            console.error("Error in network setup:", e);
         }
     });
     </script>
@@ -549,6 +579,32 @@ def add_custom_css(html_content: str) -> str:
         
         #select-menu {
             display:none
+        }
+        
+        #physics-toggle-btn {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background-color: rgba(255, 255, 255, 0.95);
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 8px 12px;
+            font-size: 14px;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            transition: all 0.2s ease;
+        }
+        
+        #physics-toggle-btn:hover {
+            background-color: #f8f8f8;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+        }
+        
+        #physics-toggle-btn.active {
+            background-color: #e6f7ff;
+            border-color: #1890ff;
+            color: #1890ff;
         }
     </style>
     """
