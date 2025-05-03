@@ -3,10 +3,7 @@
 .vscode
 
 # Data
-data/database_dump
-data/final_data
-data/initial_data
-data/processed_data
+data/
 output/
 
 # Dashboard app
