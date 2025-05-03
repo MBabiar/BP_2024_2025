@@ -1,0 +1,18 @@
+# IDEs
+.idea
+.vscode
+
+# Data
+data/database_dump
+data/final_data
+data/initial_data
+data/processed_data
+output/
+
+# Dashboard app
+dashboard_app/src/assets/family_tree
+dashboard_app/src/cache
+
+# Miscellaneous
+markdown/
+poetry.lock

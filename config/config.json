@@ -1,0 +1,31 @@
+{
+    "graph_database": {
+        "batch_size": 25000,
+        "dbname": "catbase",
+        "host": "localhost",
+        "password": "root0123",
+        "port": 7687,
+        "user": "neo4j"
+    },
+    "graph_database_docker": {
+        "dbname": "catbase",
+        "host": "catbase_neo4j",
+        "password": "root0123",
+        "port": 7687,
+        "user": "neo4j"
+    },
+    "relational_database": {
+        "dbname": "catbase",
+        "host": "localhost",
+        "password": "root",
+        "port": 5450,
+        "user": "postgres"
+    },
+    "relational_database_docker": {
+        "dbname": "catbase",
+        "host": "catbase_postgres_original_db",
+        "password": "root",
+        "port": 5432,
+        "user": "postgres"
+    }
+}

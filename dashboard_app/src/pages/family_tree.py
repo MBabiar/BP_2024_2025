@@ -1,0 +1,89 @@
+import dash
+import dash_bootstrap_components as dbc
+from dash import dcc, html
+
+from dashboard_app.src.components.reusable.BasicCard import BasicCard
+from dashboard_app.src.components.reusable.GraphCard import GraphCard
+from dashboard_app.src.components.reusable.PrimaryButton import PrimaryButton
+from dashboard_app.src.components.unique.search import create_cat_search
+
+dash.register_page(__name__, path="/family-tree", title="Family Tree", name="Family Tree", order=2)
+
+
+def layout() -> list:
+    """
+    Create the family tree visualization page layout with search and interactive controls.
+
+    Returns:
+        list: List of Dash components making up the family tree visualization page
+    """
+    return [
+        dbc.Row(
+            [
+                # --------------------------------------------------
+                # Left column: Search and settings
+                # --------------------------------------------------
+                dbc.Col(
+                    [
+                        html.Div(
+                            [
+                                BasicCard(
+                                    title="Search for a Cat",
+                                    children=[
+                                        dcc.Dropdown(id="cat-selector", style={"display": "none"}),
+                                        create_cat_search(),
+                                        PrimaryButton(
+                                            text="Generate Family Tree",
+                                            id="generate-tree-button",
+                                        ),
+                                    ],
+                                    min_height="100px",
+                                ),
+                                BasicCard(
+                                    title="Family Tree Settings",
+                                    children=[
+                                        html.P("Depth of tree:"),
+                                        dcc.Slider(
+                                            id="tree-depth-slider",
+                                            min=1,
+                                            max=10,
+                                            step=1,
+                                            value=3,
+                                            marks={i: str(i) for i in range(1, 11)},
+                                        ),
+                                    ],
+                                    min_height="100px",
+                                ),
+                            ],
+                            className="d-flex flex-column h-100 gap-4",
+                        ),
+                    ],
+                    width=3,
+                ),
+                # --------------------------------------------------
+                # Right column: Family tree visualization
+                # --------------------------------------------------
+                dbc.Col(
+                    [
+                        GraphCard(
+                            title="Family Tree Visualization",
+                            children=[
+                                html.Iframe(id="family-tree-graph"),
+                                html.Div(id="family-tree-info"),
+                            ],
+                            min_height="100px",
+                            card_body_style={
+                                "align-content": "center",
+                                "padding": "0",
+                            },
+                            loading_parent_style={
+                                "height": "100%",
+                                "align-content": "center",
+                            },
+                        ),
+                    ],
+                    width=9,
+                ),
+            ]
+        ),
+    ]

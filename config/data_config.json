@@ -1,0 +1,43 @@
+{
+    "column_types": {
+        "breed_category": "str",
+        "breed_code": "str",
+        "breed_group": "str",
+        "category": "str",
+        "cattery": "str",
+        "cattery_name": "str",
+        "chip": "str",
+        "color": "str",
+        "color_code": "str",
+        "color_definition": "str",
+        "colour_code": "str",
+        "colour_definition": "str",
+        "country_current": "str",
+        "country_current_name": "str",
+        "country_origin": "str",
+        "country_origin_name": "str",
+        "extracted_breed": "str",
+        "father_name": "str",
+        "father_reg_number": "str",
+        "full_breed_name": "str",
+        "gender": "str",
+        "group": "str",
+        "mother_name": "str",
+        "mother_reg_number": "str",
+        "name": "str",
+        "reg_num": "str",
+        "reg_num_current": "str",
+        "reg_num_origin": "str",
+        "registration_number_current": "str",
+        "source_db_name": "str",
+        "src_db": "str",
+        "title_after": "str",
+        "title_before": "str"
+    },
+    "data_paths": {
+        "final": "data/final_data",
+        "helper": "data/helper_data",
+        "initial": "data/initial_data",
+        "processed": "data/processed_data"
+    }
+}

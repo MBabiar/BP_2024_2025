@@ -1,0 +1,115 @@
+name: catbase
+services:
+    postgres_original_db:
+        image: postgres:16.6
+        container_name: catbase_postgres_original_db
+        environment:
+            POSTGRES_DB: catbase
+            POSTGRES_PASSWORD: root
+            POSTGRES_USER: postgres
+        ports:
+            - '5450:5432'
+        volumes:
+            - catbase_postgres_original_data:/var/lib/postgresql/data
+        networks:
+            - postgres_network
+        healthcheck:
+            interval: 2s
+            retries: 30
+            test: ['CMD-SHELL', 'pg_isready -U postgres']
+            timeout: 2s
+
+    postgres_original_db_init:
+        image: postgres:16.6
+        container_name: catbase_postgres_original_db_init
+        environment:
+            PGHOST: catbase_postgres_original_db
+            PGUSER: postgres
+            PGPASSWORD: root
+            PGPORT: 5432
+            HOSTNAME: catbase_postgres_original_db_init
+        volumes:
+            - init_flag_postgres:/init_flag_postgres
+            - ./data/database_dump/infocat_dump:/dump/infocat_dump
+        networks:
+            - postgres_network
+        depends_on:
+            postgres_original_db:
+                condition: service_healthy
+        command: >
+            bash -c "
+            if [ ! -f /init_flag_postgres/done ]; then
+              until pg_isready -h catbase_postgres_original_db -U postgres; do sleep 1; done &&
+              pg_restore -h catbase_postgres_original_db -U postgres --no-owner --role=postgres -v -d catbase /dump/infocat_dump &&
+              touch /init_flag_postgres/done;
+            fi"
+        restart: 'no'
+
+    neo4j:
+        image: neo4j:5.16.0
+        container_name: catbase_neo4j
+        environment:
+            NEO4J_AUTH: neo4j/root0123
+        ports:
+            - '7687:7687'
+            - '7474:7474'
+        volumes:
+            - catbase_neo4j_data:/data
+        networks:
+            - neo4j_network
+        healthcheck:
+            interval: 2s
+            retries: 30
+            test: ['CMD', 'wget', '--no-verbose', '--spider', 'http://localhost:7474']
+            timeout: 2s
+        restart: unless-stopped
+        stop_grace_period: 2m
+
+    catbase_dashboard_app:
+        build:
+            context: ./dashboard_app
+        container_name: catbase_dashboard_app
+        ports:
+            - '8080:8080'
+        volumes:
+            - ./config:/app/config
+        networks:
+            - neo4j_network
+        depends_on:
+            neo4j:
+                condition: service_healthy
+    
+    catbase_data_processor_and_seeder:
+        build:
+            context: .
+            dockerfile: src/Dockerfile.unified
+        container_name: catbase_data_processor_and_seeder
+        volumes:
+            - ./data:/app/data
+            - init_flag_neo4j:/init_flag_neo4j
+        environment:
+            - KEEP_RUNNING=false
+        networks:
+            - postgres_network
+            - neo4j_network
+        depends_on:
+            postgres_original_db:
+                condition: service_healthy
+            neo4j:
+                condition: service_healthy
+
+volumes:
+    catbase_postgres_original_data:
+        name: catbase_postgres_original_data
+    catbase_neo4j_data:
+        name: catbase_neo4j_data
+    init_flag_postgres:
+        name: init_flag_postgres
+    init_flag_neo4j:
+        name: init_flag_neo4j
+
+networks:
+    postgres_network:
+        driver: bridge
+    neo4j_network:
+        driver: bridge
