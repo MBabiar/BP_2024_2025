@@ -4,26 +4,27 @@ default: help
 
 help:
 	@echo "Available commands:"
-	@echo "  make help            - Show this help message"
-	@echo "  make clean           - Remove all containers and volumes"
-	@echo "  make setup           - Setup the project (build containers)"
+	@echo "  make help            		- Show this help message"
+	@echo "  make clean           		- Remove all containers and volumes"
+	@echo "  make setup           		- Setup the project (build containers)"
 	@echo ""
 	@echo "Main workflow commands:"
-	@echo "  make first-run       - Complete initial setup (postgres, process data, seed neo4j, run dashboard)"
-	@echo "  make dashboard       - Start Neo4j (if not running) and run dashboard app"
-	@echo "  make dashboard-reset - Reset Neo4j database and restart dashboard app"
+	@echo "  make first-run       		- Complete initial setup (postgres, process data, seed neo4j, run dashboard)"
+	@echo "  make dashboard       		- Start Neo4j (if not running) and run dashboard app"
+	@echo "  make dashboard-reset 		- Start Neo4j database and restart dashboard app"
 	@echo ""
 	@echo "Individual steps:"
-	@echo "  make run-postgres    - Start and initialize PostgreSQL database"
-	@echo "  make run-neo4j       - Stop existing Neo4j container and restart Neo4j database"
-	@echo "  make process-data    - Run data processing notebooks"
-	@echo "  make seed-neo4j      - Seed Neo4j database"
-	@echo "  make run-dashboard   - Start the dashboard app"
-	@echo "  make process-and-seed - Process data and seed Neo4j in one step"
-	@echo "  make reset-neo4j     - Reset Neo4j database and seed it again"
+	@echo "  make run-postgres    		- Start and initialize PostgreSQL database"
+	@echo "  make run-neo4j       		- Stop existing Neo4j container and restart Neo4j database"
+	@echo "  make process-data    		- Run data processing notebooks"
+	@echo "  make seed-neo4j      		- Seed Neo4j database"
+	@echo "  make run-dashboard   		- Start the dashboard app"
+	@echo "  make process-and-seed 		- Process data and seed Neo4j in one step"
+	@echo "  make reset-neo4j     		- Reset Neo4j database and seed it again"
+	@echo "  make reset-neo4j_volume 	- Reset Neo4j database including volume data and seed it again"
 	@echo ""
 	@echo "Utility commands:"
-	@echo "  make stop            - Stop all running containers"
+	@echo "  make stop            		- Stop all running containers"
 
 clean:
 	@echo "Removing all containers and volumes..."
@@ -44,7 +45,7 @@ dashboard:
 	@docker-compose up -d catbase_dashboard_app
 	@echo "Dashboard is now running!"
 
-dashboard-reset:
+dashboard-reset: reset-neo4j
 	@echo "Stopping dashboard app..."
 	@docker-compose stop catbase_dashboard_app
 	@echo "Removing dashboard app container..."
@@ -79,6 +80,11 @@ seed-neo4j:
 	docker-compose run --rm catbase_data_processor_and_seeder seed
 
 reset-neo4j:
+	@echo "Resetting Neo4j database..."
+	docker-compose down neo4j
+	docker-compose up -d neo4j
+
+reset-neo4j_volume:
 	@echo "Resetting Neo4j database..."
 	docker-compose down neo4j
 	docker volume rm -f catbase_neo4j_data || true

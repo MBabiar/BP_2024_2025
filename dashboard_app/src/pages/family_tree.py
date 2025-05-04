@@ -42,7 +42,7 @@ def layout() -> list:
                                 BasicCard(
                                     title="Family Tree Settings",
                                     children=[
-                                        html.P("Depth of tree:"),
+                                        html.P("Depth of tree:", className="mb-0"),
                                         dbc.Input(
                                             id="tree-depth-input",
                                             type="number",
@@ -51,8 +51,13 @@ def layout() -> list:
                                             step=1,
                                             value=3,
                                         ),
+                                        html.P(
+                                            "Maximum recommended depth is 10, as larger values are slower to render and less visually clear.",
+                                            className="text-muted fst-italic small mt-1 mb-0",
+                                        ),
                                     ],
                                     min_height="100px",
+                                    card_body_class_name="py-2",
                                 ),
                             ],
                             className="d-flex flex-column h-100 gap-4",

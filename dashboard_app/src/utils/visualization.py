@@ -199,6 +199,48 @@ def create_country_map(country_df: pd.DataFrame = None) -> go.Figure:
     return fig
 
 
+def _calculate_max_tree_depth(edges_data: list, root_cat_id: str) -> int:
+    """
+    Calculate the maximum depth of the family tree from the edges data.
+
+    Args:
+        edges_data (list): List of edges in the graph with parent_id and child_id
+        root_cat_id (str): ID of the root cat
+
+    Returns:
+        int: Maximum depth of the tree from root
+    """
+    if not edges_data:
+        return 1
+
+    child_to_parents = {}
+
+    for edge in edges_data:
+        child_id = edge.get("child_id")
+        parent_id = edge.get("parent_id")
+        if child_id and parent_id:
+            if child_id not in child_to_parents:
+                child_to_parents[child_id] = []
+            child_to_parents[child_id].append(parent_id)
+
+    visited = set()
+    queue = [(root_cat_id, 0)]
+    max_depth = 0
+
+    while queue:
+        node_id, depth = queue.pop(0)
+        if node_id in visited:
+            continue
+
+        visited.add(node_id)
+        max_depth = max(max_depth, depth)
+
+        for parent_id in child_to_parents.get(node_id, []):
+            queue.append((parent_id, depth + 1))
+
+    return max_depth
+
+
 def create_family_tree_network(
     depth: int,
     graph_structure_data: dict,
@@ -225,6 +267,13 @@ def create_family_tree_network(
         return net.generate_html()
 
     G = nx.DiGraph()
+
+    node_count = len(graph_structure_data.get("nodes", []))
+
+    max_tree_depth = _calculate_max_tree_depth(graph_structure_data.get("edges", []), root_cat_id)
+
+    root_cat_legend_data["node_count"] = node_count
+    root_cat_legend_data["max_tree_depth"] = max_tree_depth
 
     for cat_details in graph_structure_data.get("nodes", []):
         cat_id = cat_details.get("id")
@@ -257,7 +306,12 @@ def create_family_tree_network(
         rel_type = edge.get("rel_type")
 
         if child_id and parent_id:
-            G.add_edge(parent_id, child_id, label=rel_type, title=rel_type)
+            G.add_edge(
+                parent_id,
+                child_id,
+                label=rel_type,
+                title=rel_type,
+            )
 
     net = Network(
         height="100%", width="100%", directed=True, notebook=False, select_menu=True, cdn_resources="remote"
@@ -266,7 +320,7 @@ def create_family_tree_network(
     depth_scale_multiplier = min(depth, 20)
 
     root_node_size = 30 + 2 * depth_scale_multiplier
-    node_label_size = 14 + 2 * depth_scale_multiplier
+    node_label_size = 14 + 1 * depth_scale_multiplier
     edge_selection_width = 0.5 + depth_scale_multiplier * 0.5
     edge_hover_width = 0.5 + depth_scale_multiplier * 0.5
     gravitational_constant = -30 - 5 * depth_scale_multiplier
@@ -328,7 +382,9 @@ def create_family_tree_network(
 
     html_content = net.generate_html()
     html_content = add_custom_js(html_content)
-    html_content = add_custom_legend(html_content, root_cat_id, inbreeding_coefficient, root_cat_legend_data)
+    html_content = add_custom_legend(
+        html_content, root_cat_id, inbreeding_coefficient, root_cat_legend_data, node_count
+    )
     html_content = add_custom_css(html_content)
 
     return html_content
@@ -391,7 +447,9 @@ def add_custom_js(html_content: str) -> str:
     return html_content.replace("</body>", reset_selection_js + "</body>")
 
 
-def add_custom_legend(html_content: str, cat_id: str, inbreeding_coefficient: float, cat_data: dict) -> str:
+def add_custom_legend(
+    html_content: str, cat_id: str, inbreeding_coefficient: float, cat_data: dict, node_count: int = None
+) -> str:
     """
     Add a custom legend to the network visualization with cat information.
 
@@ -400,6 +458,7 @@ def add_custom_legend(html_content: str, cat_id: str, inbreeding_coefficient: fl
         cat_id (str): ID of the root cat to highlight in the visualization
         inbreeding_coefficient (float): Inbreeding coefficient to display in the visualization
         cat_data (dict): Flattened cat data dictionary with direct access to fields
+        node_count (int, optional): Number of nodes in the network
 
     Returns:
         str: Updated HTML content with the custom legend
@@ -450,6 +509,12 @@ def add_custom_legend(html_content: str, cat_id: str, inbreeding_coefficient: fl
             inbreeding_color = (
                 "#dc3545" if inbreeding_percentage > 15 else "#ffc107" if inbreeding_percentage > 5 else "#28a745"
             )
+
+        # Get node count and max tree depth from cat_data if not provided
+        if node_count is None:
+            node_count = cat_data.get("node_count", "N/A")
+
+        max_tree_depth = cat_data.get("max_tree_depth", "N/A")
 
         custom_legend = f"""
         <div class="cat-info-legend" 
@@ -529,7 +594,8 @@ def add_custom_legend(html_content: str, cat_id: str, inbreeding_coefficient: fl
             </div>
             
             <div style="display: flex; 
-                        align-items: center;">
+                        align-items: center;
+                        margin-bottom: 10px;">
                 <div style="width: 12px; 
                             height: 12px; 
                             background-color: {colors.UNKNOWN_GENDER_COLOR}; 
@@ -537,6 +603,16 @@ def add_custom_legend(html_content: str, cat_id: str, inbreeding_coefficient: fl
                             margin-right: 5px;">
                 </div>
                 <span>Unknown</span>
+            </div>
+            
+            <div style="font-weight: bold; 
+                        padding-top: 5px;
+                        border-top: 1px solid #ddd;">
+                Cats in tree: <span style="color: #1890ff;">{node_count}</span>
+            </div>
+            
+            <div style="font-weight: bold;">
+                Maximum depth: <span style="color: #1890ff;">{max_tree_depth}</span>
             </div>
         </div>
         """
