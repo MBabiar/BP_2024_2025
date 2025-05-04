@@ -66,7 +66,8 @@ def layout() -> list:
                         ],
                         className="d-flex flex-column h-100 gap-4",
                     ),
-                    width=3,
+                    sm=12,
+                    md=3,
                 ),
                 # --------------------------------------------------
                 # Visualization
@@ -89,7 +90,8 @@ def layout() -> list:
                             },
                         ),
                     ],
-                    width=9,
+                    sm=12,
+                    md=9,
                 ),
             ],
         ),

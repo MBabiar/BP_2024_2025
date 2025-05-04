@@ -136,9 +136,8 @@ layout = html.Div(
                             ),
                         ],
                     ),
-                    xs=12,
-                    lg=4,
-                    xl=3,
+                    sm=12,
+                    md=3,
                 ),
                 # --------------------------------------------------
                 # Right column for visualization
@@ -180,9 +179,8 @@ layout = html.Div(
                             },
                         ),
                     ],
-                    xs=12,
-                    lg=8,
-                    xl=9,
+                    sm=12,
+                    md=9,
                 ),
             ],
             className="g-3",
