@@ -395,7 +395,6 @@ def add_custom_js(html_content: str) -> str:
     Add custom JavaScript.
 
     Fixes the issue where clicking on an empty space in the network resets the selection.
-
     Adds a button to toggle the physics simulation on and off.
 
     Args:
@@ -409,6 +408,10 @@ def add_custom_js(html_content: str) -> str:
     window.addEventListener('load', function() {
         try {
             if (typeof network !== 'undefined') {
+                if (typeof highlightActive === 'undefined') {
+                    window.highlightActive = false;
+                }
+                
                 network.on("click", function(params) {
                     if (params.nodes.length === 0 && params.edges.length === 0) {
                         neighbourhoodHighlight({nodes: []});
