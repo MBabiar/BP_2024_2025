@@ -83,11 +83,11 @@ class PerformanceTester:
         """
         if len(times) <= 2:
             return {
-                "min": min(times),
-                "max": max(times),
-                "avg": mean(times),
-                "median": median(times),
-                "times": times,
+                "min": round(min(times) * 1000, 2),
+                "max": round(max(times) * 1000, 2),
+                "avg": round(mean(times) * 1000, 2),
+                "median": round(median(times) * 1000, 2),
+                "times": [round(t * 1000, 2) for t in times],
             }
 
         sorted_times = sorted(times)
@@ -101,11 +101,11 @@ class PerformanceTester:
             filtered_times = sorted_times
 
         return {
-            "min": min(filtered_times),
-            "max": max(filtered_times),
-            "avg": mean(filtered_times),
-            "median": median(filtered_times),
-            "times": times,
+            "min": round(min(filtered_times) * 1000, 2),
+            "max": round(max(filtered_times) * 1000, 2),
+            "avg": round(mean(filtered_times) * 1000, 2),
+            "median": round(median(filtered_times) * 1000, 2),
+            "times": [round(t * 1000, 2) for t in times],
         }
 
     def run_test(self, query_type, cat_id, depth, iterations):

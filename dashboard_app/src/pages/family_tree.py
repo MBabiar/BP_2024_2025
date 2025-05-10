@@ -7,7 +7,7 @@ from dashboard_app.src.components.reusable.GraphCard import GraphCard
 from dashboard_app.src.components.reusable.PrimaryButton import PrimaryButton
 from dashboard_app.src.components.unique.search import create_cat_search
 
-dash.register_page(__name__, path="/family-tree", title="Family Tree", name="Family Tree", order=2)
+dash.register_page(__name__, path="/family-tree", title="Family tree", name="Family tree", order=2)
 
 
 def layout() -> list:
@@ -28,19 +28,19 @@ def layout() -> list:
                         html.Div(
                             [
                                 BasicCard(
-                                    title="Search for a Cat",
+                                    title="Search for a cat",
                                     children=[
                                         dcc.Dropdown(id="cat-selector", style={"display": "none"}),
                                         create_cat_search(),
                                         PrimaryButton(
-                                            text="Generate Family Tree",
+                                            text="Generate Family tree",
                                             id="generate-tree-button",
                                         ),
                                     ],
                                     min_height="100px",
                                 ),
                                 BasicCard(
-                                    title="Family Tree Settings",
+                                    title="Family tree settings",
                                     children=[
                                         html.P("Depth of tree:", className="mb-0"),
                                         dbc.Input(
@@ -72,7 +72,7 @@ def layout() -> list:
                 dbc.Col(
                     [
                         GraphCard(
-                            title="Family Tree Visualization",
+                            title="Family tree visualization",
                             children=[
                                 html.Iframe(id="family-tree-graph"),
                                 html.Div(id="family-tree-info"),

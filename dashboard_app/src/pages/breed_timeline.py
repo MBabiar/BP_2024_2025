@@ -7,7 +7,7 @@ from dashboard_app.src.components.reusable.BasicCard import BasicCard
 from dashboard_app.src.components.reusable.GraphCard import GraphCard
 from dashboard_app.src.constants import colors
 
-register_page(__name__, path="/breed-timeline", title="Breed Timeline")
+register_page(__name__, path="/breed-timeline", title="Breed timeline")
 
 SECTION_STYLE = {
     "margin-bottom": "1.5rem",
@@ -32,7 +32,7 @@ layout = html.Div(
                                     html.Div(
                                         [
                                             html.Label(
-                                                "Year Range:",
+                                                "Year range:",
                                                 className="fw-bold mb-1",
                                             ),
                                             dbc.Row(
@@ -94,12 +94,12 @@ layout = html.Div(
                                     html.Div(
                                         [
                                             html.Label(
-                                                "Selected Breeds:",
+                                                "Selected breeds:",
                                                 className="fw-bold mb-1",
                                             ),
                                             html.Div(
                                                 dbc.Button(
-                                                    "Add Breed",
+                                                    "Add breed",
                                                     id="open-breed-select-modal",
                                                     color="primary",
                                                     size="sm",
@@ -123,7 +123,7 @@ layout = html.Div(
                                     # Update Chart button
                                     # --------------------------------------------------
                                     dbc.Button(
-                                        [html.I(className="fas fa-chart-line me-2"), "Generate Chart"],
+                                        [html.I(className="fas fa-chart-line me-2"), "Generate chart"],
                                         id="update-timeline-button",
                                         size="md",
                                         className="w-100",
@@ -145,7 +145,7 @@ layout = html.Div(
                 dbc.Col(
                     [
                         GraphCard(
-                            title="Breed Population Timeline",
+                            title="Breed population timeline",
                             children=[
                                 dcc.Graph(
                                     id="breed-timeline-chart",
@@ -198,7 +198,7 @@ layout = html.Div(
                             [
                                 dbc.Col(
                                     [
-                                        dbc.Label("Sort By:", className="fw-bold"),
+                                        dbc.Label("Sort by:", className="fw-bold"),
                                         dbc.RadioItems(
                                             id="breed-sort-type",
                                             options=[
@@ -213,7 +213,7 @@ layout = html.Div(
                                 ),
                                 dbc.Col(
                                     dbc.Button(
-                                        [html.I(className="fas fa-times-circle me-1"), "Reset Selection"],
+                                        [html.I(className="fas fa-times-circle me-1"), "Reset selection"],
                                         id="reset-breed-selection",
                                         color="secondary",
                                         size="sm",

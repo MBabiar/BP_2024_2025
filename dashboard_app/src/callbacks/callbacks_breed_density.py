@@ -146,7 +146,7 @@ def register_callbacks(app):
             return (
                 empty_figure,
                 html.H5(
-                    "Select a breed and click 'Update Map' to visualize the breed density",
+                    "Select a breed and click 'Update map' to visualize the breed density",
                     className="text-muted text-center my-3",
                 ),
                 hidden_graph_style,

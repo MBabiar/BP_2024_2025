@@ -24,7 +24,7 @@ def register_callbacks(app):
     """
     Register callbacks for general statistics tab
 
-    This function sets up all Dash callbacks related to the General Statistics tab.
+    This function sets up all Dash callbacks related to the General statistics tab.
 
     Args:
         app: The Dash application instance

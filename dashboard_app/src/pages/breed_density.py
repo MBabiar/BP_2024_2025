@@ -6,7 +6,7 @@ from dashboard_app.src.components.reusable.BasicCard import BasicCard
 from dashboard_app.src.components.reusable.GraphCard import GraphCard
 from dashboard_app.src.components.reusable.PrimaryButton import PrimaryButton
 
-dash.register_page(__name__, path="/breed-density", title="Breed Density Map", name="Breed Density Map", order=3)
+dash.register_page(__name__, path="/breed-density", title="Breed density map", name="Breed density map", order=3)
 
 
 def layout() -> list:
@@ -27,7 +27,7 @@ def layout() -> list:
                     html.Div(
                         children=[
                             BasicCard(
-                                title="Breed Selection",
+                                title="Breed selection",
                                 children=[
                                     html.P("Select a breed to view its geographical distribution:"),
                                     html.Div(
@@ -49,7 +49,7 @@ def layout() -> list:
                                 min_height="100px",
                             ),
                             BasicCard(
-                                title="About Breed Density",
+                                title="About breed density",
                                 children=[
                                     html.P(
                                         """The breed density map shows how a specific cat breed is distributed across different 
@@ -75,7 +75,7 @@ def layout() -> list:
                 dbc.Col(
                     [
                         GraphCard(
-                            title="Breed Density by Region",
+                            title="Breed density by region",
                             children=[
                                 dcc.Graph(id="breed-density-map", style={"display": "none"}),
                                 html.Div(id="breed-density-info"),

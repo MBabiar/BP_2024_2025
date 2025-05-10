@@ -31,6 +31,8 @@ def init_cache(app) -> None:
         },
     )
 
+    _cache.clear()  # Clear the cache on initialization
+
     logger.debug(f"Cache initialized with directory: {CACHE_DIR}")
 
 

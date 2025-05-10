@@ -21,7 +21,7 @@ def run_performance_tests(output_dir=None):
     cat_id = TestConfig.DEFAULT_CAT_ID
 
     print(
-        colored(f"\n{'=' * 80}\n  PERFORMANCE TEST: Neo4j vs PostgreSQL Family Tree Queries\n{'=' * 80}", "yellow")
+        colored(f"\n{'=' * 80}\n  PERFORMANCE TEST: Neo4j vs PostgreSQL Family tree Queries\n{'=' * 80}", "yellow")
     )
     print(f"Testing with cat ID: {cat_id}")
 
@@ -58,8 +58,8 @@ def run_performance_tests(output_dir=None):
         winner = result["winner"]
         factor = result["factor"]
 
-        print(f"PostgreSQL avg: {colored(f'{pg_avg:.4f}s', 'blue')}")
-        print(f"Neo4j avg: {colored(f'{neo_avg:.4f}s', 'green')}")
+        print(f"PostgreSQL avg: {colored(f'{pg_avg:.2f}ms', 'blue')}")
+        print(f"Neo4j avg: {colored(f'{neo_avg:.2f}ms', 'green')}")
         print(f"Winner: {colored(winner, 'green' if winner == 'Neo4j' else 'blue')} ({factor:.2f}x faster)")
         print(f"Test completed in {end_time - start_time:.2f} seconds")
 

@@ -17,7 +17,7 @@ from dashboard_app.src.utils.logger import logger
 # --------------------------------------------------
 # Application configuration
 # --------------------------------------------------
-parser = argparse.ArgumentParser(description="Cat Database Dashboard")
+parser = argparse.ArgumentParser(description="Cat database dashboard")
 parser.add_argument("--verbose", "-v", action="store_true", help="Enable verbose output")
 args = parser.parse_args()
 
@@ -33,7 +33,7 @@ server = flask.Flask(__name__)
 app = dash.Dash(
     __name__,
     server=server,
-    title="Cat Database Dashboard",
+    title="Cat database dashboard",
     external_stylesheets=[dbc.themes.FLATLY],
     use_pages=True,
     meta_tags=[{"name": "viewport", "content": "width=device-width, initial-scale=1"}],

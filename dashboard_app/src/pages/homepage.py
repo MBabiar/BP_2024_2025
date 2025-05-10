@@ -23,13 +23,13 @@ def layout() -> list:
             dbc.Col(
                 dbc.Card(
                     [
-                        html.H1("Cat Database Dashboard", className="display-4 mb-3"),
+                        html.H1("Cat database dashboard", className="display-4 mb-3"),
                         html.P(
                             "Welcome to the comprehensive cat database explorer. Find statistics and insights about cats from around the world.",
                             className="lead mb-4",
                         ),
                     ],
-                    className="text-center p-3",
+                    className="text-center py-3 px-4",
                     style={
                         "color": colors.TEXT_PRIMARY,
                         "background-color": colors.CARD_BACKGROUND_OPACITY,
@@ -45,10 +45,10 @@ def layout() -> list:
         # --------------------------------------------------
         dbc.Row(
             [
-                dbc.Col(MetricCard("Total cats", id_value="total-cats"), width=3),
-                dbc.Col(MetricCard("Total breeds", id_value="total-breeds"), width=3),
-                dbc.Col(MetricCard("Total countries", id_value="total-countries"), width=3),
-                dbc.Col(MetricCard("Total databases", id_value="total-source-dbs"), width=3),
+                dbc.Col(MetricCard("Total cats", id_value="total-cats"), xs=12, sm=6, lg=3),
+                dbc.Col(MetricCard("Total breeds", id_value="total-breeds"), xs=12, sm=6, lg=3),
+                dbc.Col(MetricCard("Total countries", id_value="total-countries"), xs=12, sm=6, lg=3),
+                dbc.Col(MetricCard("Total databases", id_value="total-source-dbs"), xs=12, sm=6, lg=3),
             ],
         ),
         # --------------------------------------------------

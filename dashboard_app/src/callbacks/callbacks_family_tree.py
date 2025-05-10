@@ -284,7 +284,7 @@ def register_callbacks(app) -> None:
             return (
                 "",
                 html.H5(
-                    "Select a cat and click 'Generate Family Tree'",
+                    "Select a cat and click 'Generate Family tree'",
                     className="text-muted text-center my-3",
                 ),
                 hidden_iframe_style,

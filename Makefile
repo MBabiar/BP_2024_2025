@@ -47,13 +47,9 @@ dashboard:
 
 dashboard-reset: reset-neo4j
 	@echo "Stopping dashboard app..."
-	@docker-compose stop catbase_dashboard_app
-	@echo "Removing dashboard app container..."
-	@docker-compose rm -f catbase_dashboard_app
-	@echo "Rebuilding dashboard app..."
-	@docker-compose build catbase_dashboard_app
-	@echo "Starting dashboard app..."
-	@docker-compose up -d catbase_dashboard_app
+	@docker-compose down catbase_dashboard_app
+	@echo "Starting rebuild dashboard app..."
+	@docker-compose up -d --build catbase_dashboard_app
 	@echo "Dashboard app has been reset and is now running!"
 
 run-postgres:

@@ -548,7 +548,7 @@ def add_custom_legend(
                 {f"<div><strong>Titles:</strong> {titles_str}</div>" if titles_str != "None" else ""}
                 {f"<div><strong>Breed:</strong> {breed_code}</div>" if breed_code != "Unknown" else ""}
                 {f"<div><strong>Color:</strong> {color_code}</div>" if color_code != "Unknown" else ""}
-                {f"<div><strong>Combined:</strong> {combined_code}</div>" if combined_code else ""}
+                {f"<div><strong>EMS code:</strong> {combined_code}</div>" if combined_code else ""}
                 {f"<div><strong>Color Definition:</strong> {color_definition}</div>" if color_definition != "Unknown" else ""}
                 {f"<div><strong>Birth Country:</strong> {birth_country_name}</div>" if birth_country_name != "Unknown" else ""}
                 {f"<div><strong>Current Country:</strong> {current_country_name}</div>" if current_country_name != "Unknown" and current_country_name != birth_country_name else ""}
@@ -901,7 +901,7 @@ def _format_cat_details_for_tooltip(cat_details: dict) -> str:
         tooltip += f"\nColor definition: {color_definition}"
 
     if breed_code and color_code:
-        tooltip += f"\nCombined code: {breed_code} {color_code}"
+        tooltip += f"\nEMS code: {breed_code} {color_code}"
 
     birth_country_name = cat_details.get("birth_country_name")
     if birth_country_name:

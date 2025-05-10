@@ -16,7 +16,7 @@ class Footer(dbc.Row):
             dbc.Col(
                 html.Footer(
                     html.P(
-                        "Cat Database Dashboard © 2025",
+                        "Cat database dashboard © 2025",
                         className="text-center py-4 mb-4",
                         style={"color": colors.TEXT_PRIMARY},
                     )

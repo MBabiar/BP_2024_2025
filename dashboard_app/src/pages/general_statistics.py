@@ -5,7 +5,7 @@ from dash import dcc, html
 from dashboard_app.src.components.reusable.GraphCard import GraphCard
 from dashboard_app.src.components.unique.BreedDistributionChart import BreedDistributionChart
 
-dash.register_page(__name__, path="/statistics", title="General Statistics", name="General Statistics", order=1)
+dash.register_page(__name__, path="/statistics", title="General statistics", name="General statistics", order=1)
 
 
 def layout() -> list:

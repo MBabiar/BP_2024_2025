@@ -24,7 +24,7 @@ class MainNavbar(dbc.Navbar):
                     # --------------------------------------------------
                     dbc.NavbarBrand(
                         html.H3(
-                            "Cat Database Dashboard",
+                            "Cat database dashboard",
                             style={"color": colors.TEXT_SECONDARY, "margin-bottom": 0},
                         ),
                         href="/",

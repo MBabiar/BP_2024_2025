@@ -8,12 +8,13 @@ class TestConfig:
     DEFAULT_CAT_ID = 2
 
     DEPTH_TIERS = [
-        {"depths": [1, 2, 3, 4, 5], "iterations": 50},
-        {"depths": [6, 7, 8, 9, 10], "iterations": 25},
-        {"depths": [20, 50], "iterations": 10},
-        {"depths": [100, 500, 1000], "iterations": 2},
+        {"depths": [3, 5], "iterations": 1000},
+        {"depths": [10], "iterations": 500},
+        {"depths": [15], "iterations": 100},
+        {"depths": [20], "iterations": 50},
+        {"depths": [23], "iterations": 40},
     ]
-    NON_DEPTH_ITERATIONS = 10
+    NON_DEPTH_ITERATIONS = 200
 
     """ DEPTH_TIERS = [
         {"depths": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], "iterations": 100},
