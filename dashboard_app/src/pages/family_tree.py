@@ -47,7 +47,7 @@ def layout() -> list:
                                             id="tree-depth-input",
                                             type="number",
                                             min=1,
-                                            max=1000,
+                                            max=50,
                                             step=1,
                                             value=3,
                                         ),
