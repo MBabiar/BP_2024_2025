@@ -60,49 +60,34 @@ def calculate_inbreeding_coefficient_modern(cat_id: str) -> float:
         return 0.0
 
     inbreeding_coeff = 0.0
-    processed_paths = set()  # Track processed path combinations to avoid double-counting
+    processed_paths = set()
 
     for ancestor in common_ancestors:
         try:
-            # Find all simple paths from mother to this ancestor
             paths_mother_to_ancestor = list(nx.all_simple_paths(graph, source=mother_id, target=ancestor))
-            # Find all simple paths from father to this ancestor
             paths_father_to_ancestor = list(nx.all_simple_paths(graph, source=father_id, target=ancestor))
 
             for p_m in paths_mother_to_ancestor:
                 for p_f in paths_father_to_ancestor:
-                    # Create a unique identifier for this path combination
                     path_key = (tuple(p_m), tuple(p_f))
 
-                    # Skip if we've already processed this path combination
                     if path_key in processed_paths:
                         continue
 
-                    # Add to processed paths
                     processed_paths.add(path_key)
 
-                    # Check if this path combination is valid:
-                    # 1. The ancestor should appear exactly once in each path
-                    # 2. No other common ancestor should appear in either path (except at the end)
-
-                    # First, check if ancestor appears exactly once in each path
                     if p_m.count(ancestor) != 1 or p_f.count(ancestor) != 1:
                         continue
 
-                    # Check if any other common ancestor appears in the mother's path (excluding the end)
                     if any(node in common_ancestors for node in p_m[:-1] if node != ancestor):
                         continue
 
-                    # Check if any other common ancestor appears in the father's path (excluding the end)
                     if any(node in common_ancestors for node in p_f[:-1] if node != ancestor):
                         continue
 
-                    # Calculate path lengths (number of generations)
-                    n1 = len(p_m) - 1  # Number of edges in path from mother
-                    n2 = len(p_f) - 1  # Number of edges in path from father
+                    n1 = len(p_m) - 1
+                    n2 = len(p_f) - 1
 
-                    # Apply Wright's formula: F = (1/2)^(n1+n2+1)
-                    # Assuming Fa = 0 (ancestor's own inbreeding coefficient is zero)
                     path_contribution = 0.5 ** (n1 + n2 + 1)
 
                     print(
@@ -114,8 +99,6 @@ def calculate_inbreeding_coefficient_modern(cat_id: str) -> float:
                     inbreeding_coeff += path_contribution
 
         except nx.NodeNotFound:
-            # This might happen if, for some reason, an ID is not in the graph,
-            # though mother_id, father_id, and ancestor should be.
             logger.warning(
                 f"NodeNotFound exception for ancestor {ancestor}, mother {mother_id}, or father {father_id} during path finding."
             )
