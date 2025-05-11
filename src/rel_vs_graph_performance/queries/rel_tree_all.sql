@@ -25,14 +25,22 @@ family_members AS (
 ),
 parent_rels AS (
     SELECT 
-        a1.id AS child_id,
-        a2.id AS parent_id,
-        CASE 
-            WHEN a2.id = a1.father_id THEN 'HAS_FATHER'
-            WHEN a2.id = a1.mother_id THEN 'HAS_MOTHER'
-        END AS rel_type
-    FROM ancestry a1
-    JOIN ancestry a2 ON a2.id = a1.father_id OR a2.id = a1.mother_id
+        a.id AS child_id,
+        a.father_id AS parent_id,
+        'HAS_FATHER' AS rel_type
+    FROM ancestry a
+    WHERE a.father_id IS NOT NULL
+    AND a.father_id IN (SELECT id FROM family_members)
+    
+    UNION ALL
+    
+    SELECT 
+        a.id AS child_id,
+        a.mother_id AS parent_id,
+        'HAS_MOTHER' AS rel_type
+    FROM ancestry a
+    WHERE a.mother_id IS NOT NULL
+    AND a.mother_id IN (SELECT id FROM family_members)
 )
 SELECT
     c.id AS cat_id, 
@@ -49,23 +57,12 @@ SELECT
     NULL AS current_country_alpha_2,
     ci.cattery AS cattery_name,
     c.src_db AS source_db_name,
-    COALESCE(
-        jsonb_agg(
-            jsonb_build_object(
-                'rel_type', pr.rel_type,
-                'parent_id', pr.parent_id
-            )
-        ) FILTER (WHERE pr.parent_id IS NOT NULL),
-        '[]'::jsonb
-    ) AS parents
+    pr.rel_type,
+    pr.parent_id
 FROM 
     cats c
     JOIN family_members fm ON c.id = fm.id
     LEFT JOIN breeds b ON c.breed_id = b.id
     LEFT JOIN cat_informations ci ON c.id = ci.cat_id
     LEFT JOIN parent_rels pr ON c.id = pr.child_id
-GROUP BY 
-    c.id, c.name, c.gender, c.date_of_birth, c.color_code,
-    b.code, c.color, c.country_origin, c.country_current,
-    ci.cattery, c.src_db
-ORDER BY c.id;
+ORDER BY c.id, pr.rel_type;

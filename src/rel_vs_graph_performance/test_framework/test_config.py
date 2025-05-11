@@ -11,17 +11,9 @@ class TestConfig:
         {"depths": [3, 5], "iterations": 1000},
         {"depths": [10], "iterations": 500},
         {"depths": [15], "iterations": 100},
-        {"depths": [20], "iterations": 50},
-        {"depths": [23], "iterations": 40},
+        {"depths": [20, 23], "iterations": 50},
     ]
     NON_DEPTH_ITERATIONS = 200
-
-    """ DEPTH_TIERS = [
-        {"depths": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], "iterations": 100},
-        {"depths": [20, 50, 100], "iterations": 25},
-        {"depths": [500, 1000], "iterations": 10},
-    ]
-    NON_DEPTH_ITERATIONS = 100 """
 
     QUERY_TYPES = ["tree_ancestry", "tree_all", "breed_distribution"]
     DEPTH_QUERY_TYPES = ["tree_ancestry", "tree_all"]
